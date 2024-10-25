@@ -9,7 +9,7 @@ const LessonRequest = require('./models/LessonRequest');
 require('dotenv').config();
 
 const app = express();
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = require('./serviceAccountKey2.json');
 
 // Firebase Admin SDK setup for server-side operations
 admin.initializeApp({
