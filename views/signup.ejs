@@ -6,6 +6,27 @@
     <title>Sign Up</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* Button Styles */
+.btn-custom {
+    background-color: pink; /* Button color */
+    border: none; /* Remove border */
+}
+
+.btn-custom:hover {
+    background-color: #ff69b4; /* Light pink on hover */
+}
+
+/* Login Link Styles */
+.login-link {
+    color: white; /* Login link color */
+}
+
+.login-link:hover {
+    color: yellow; /* Login link color on hover */
+}
+
+    </style>
 </head>
 <body>
     <div class="container d-flex align-items-center justify-content-center vh-100">
@@ -21,9 +42,9 @@
                 <div class="form-group">
                     <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                <button type="submit" class="btn btn-custom btn-block">Sign Up</button>
             </form>
-            <p class="text-center">Already have an account? <a href="/login">Login here</a>.</p>
+            <p class="text-center">Already have an account? <a href="/login" class="login-link">Login here</a>.</p>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
