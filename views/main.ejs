@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        /* Basic styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Tab container styling */
+        .tab-container {
+            margin-top: 20px;
+        }
+
+        /* Tab button styling */
+        .tab-button {
+            background-color: #f1f1f1;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-right: 5px;
+            outline: none;
+        }
+
+        .tab-button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Tab content styling */
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Collapsible styling */
+        .collapsible {
+            background-color: #f1f1f1;
+            color: #444;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 18px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .collapsible::after {
+            content: '\25B6'; /* Right-pointing arrow */
+            font-size: 18px;
+            color: #777;
+            position: absolute;
+            right: 10px;
+            transition: transform 0.3s;
+        }
+
+        .collapsible.active::after {
+            transform: rotate(90deg); /* Downward-pointing arrow */
+        }
+
+        .collapsible.active, .collapsible:hover {
+            background-color: #ccc;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        .lesson-content {
+            display: none;
+            margin-top: 10px;
+        }
+
+        /* Video styling */
+        .video-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        video {
+            width: 80%;
+            max-width: 700px;
+            height: auto;
+        }
+    </style>
+    <script>
+        // Function to switch tabs
+        function openTab(event, tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            // Hide all tab contents and remove active class from all buttons
+            tabContents.forEach(content => content.classList.remove('active'));
+            tabButtons.forEach(button => button.classList.remove('active'));
+
+            // Show the current tab content and add active class to the button
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Function to toggle collapsible content
+        function toggleCollapsible(event) {
+            event.currentTarget.classList.toggle('active');
+            const content = event.currentTarget.nextElementSibling;
+            content.style.display = content.style.display === "block" ? "none" : "block";
+        }
+
+        // Set the default active tab
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.tab-button').click();
+
+            // Add event listeners to collapsible elements
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(collapsible => {
+                collapsible.addEventListener('click', toggleCollapsible);
+            });
+        });
+
+        // Function to redirect to the Dashboard tab
+        function redirectToDashboard() {
+            // Simulate clicking the "Dashboard" tab button to switch tabs
+            const dashboardTabButton = document.querySelector('.tab-button:nth-of-type(2)');
+            if (dashboardTabButton) {
+                dashboardTabButton.click();
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Welcome to the Main Page</h2>
+
+    <div class="tab-container">
+        <button class="tab-button" onclick="openTab(event, 'Courses')">Courses</button>
+        <button class="tab-button" onclick="openTab(event, 'Dashboard')">Dashboard</button>
+    </div>
+
+    <div id="Courses" class="tab-content">
+        <h3>Courses</h3>
+
+        <!-- Collapsible for Available Courses -->
+        <button class="collapsible">Available Courses</button>
+        <div class="content">
+            <!-- Nested Collapsible for Blockchain -->
+            <button class="collapsible">Blockchain</button>
+            <div class="content">
+                <p>Here write intro to blockchain course</p>
+                <div class="video-container">
+                    <h4>Preview</h4>
+                    <video controls>
+                        <source src="https://codechain.s3.amazonaws.com/Ahan+Inna+Ahagena+Inna+-+Mekala+Gamage+(Official+HD+Video)++From+www.HelaNada.com.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <!-- Pricing Information -->
+                <div class="pricing">
+                    <p>Price: <s>$30</s> <span style="color: red;">50% off</span> - Now Payable: <strong>$15</strong></p>
+                    <button onclick="redirectToDashboard()">Pay</button>
+                </div>
+
+                <!-- Sub-collapsible for each day -->
+                <% const days = [
+                    { day: 'Day 1', topic: 'Blockchain Basics', summary: 'Learn the fundamental principles behind blockchain technology, including decentralization, consensus, and immutability.', videoUrl: 'https://codechain.s3.us-east-1.amazonaws.com/Hansi+Shalika+_+Hankithi+Kawana+(%E0%B7%84%E0%B6%82%E0%B6%9A%E0%B7%92%E0%B6%AD%E0%B7%92+%E0%B6%9A%E0%B7%80%E0%B6%B1%E0%B7%8F)+_+The+Knockouts+_+The+Voice+Sri+Lanka.mp4' },
+                    { day: 'Day 2', topic: 'Consensus Mechanisms', summary: 'Explore various consensus mechanisms such as Proof of Work and Proof of Stake, and understand their role in blockchain security.', videoUrl: 'https://codechain.s3.us-east-1.amazonaws.com/One+Direction+-+Night+Changes+(Lyrics).mp4' },
+                    { day: 'Day 3', topic: 'Blockchain Applications', summary: 'Learn about real-world applications of blockchain technology across different industries.', videoUrl: 'https://codechain.s3.us-east-1.amazonaws.com/Passenger+-+Let+Her+Go+(Lyrics).mp4' },
+                    { day: 'Day 4', topic: 'Future of Blockchain', summary: 'Discuss the future trends and potential challenges that blockchain technology may face in the coming years.', videoUrl: 'https://codechain.s3.us-east-1.amazonaws.com/Piyamanne+(%E0%B6%B4%E0%B7%92%E0%B6%BA%E0%B6%B8%E0%B7%90%E0%B6%B1%E0%B7%8A%E0%B6%B1%E0%B7%9A)+-+Cover+by+Harsha+Maduranga+_+Abishek+Geethadewa+_+2022.mp4' }
+                ]; %>
+                <% days.forEach((dayItem, index) => { %>
+                    <button class="collapsible"><%= dayItem.day %></button>
+                    <div class="content">
+                        <% const dayString = `day${index + 1}`; %>
+                        <% const approvedRequest = approvedRequests.find(req => req.day === dayString); %>
+                        <% if (approvedRequest) { %>
+                            <div class="lesson-content" style="display: block;">
+                                <h4>Topic: <%= dayItem.topic %></h4>
+                                <p>Summary: <%= dayItem.summary %></p>
+                                <div class="video-container">
+                                    <video controls>
+                                        <source src="<%= dayItem.videoUrl %>" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <p>You have not been approved for this lesson yet. Please wait for admin approval.</p>
+                            <form action="/request-lesson/<%= dayString %>" method="POST">
+                                <button type="submit">Request Lessons for the Day</button>
+                            </form>
+                        <% } %>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+
+    <div id="Dashboard" class="tab-content">
+        <h3>Dashboard</h3>
+        <p>Welcome, <%= userEmail %>!</p>
+        <p>Here you can see an overview of your activities.</p>
+
+        <!-- Logout button inside Dashboard tab -->
+        <form action="/logout" method="POST" style="margin-top: 20px;">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+</body>
+</html>
