@@ -5,6 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
     <style>
+
+        /* CSS Variables for Dark and Light Mode */
+        :root {
+            --bg-color: #f0f0f0; /* Light mode background */
+            --text-color: #333; /* Light mode text color */
+            --primary-color: #4CAF50; /* Primary buttons and headings color */
+            --highlight-color: #f44336; /* Payment Due highlight color */
+        }
+
+        /* Basic Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    #Dashboard {
+        padding: 20px;
+        max-width: 800px;
+        margin: 30px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        margin-bottom: 15px;
+        color: #4CAF50;
+    }
+
+    p {
+        margin-bottom: 10px;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .payment-info {
+        padding: 15px;
+        background-color: #e9f5e9;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .payment-info strong {
+        color: #4CAF50;
+    }
+
+    .payment-frame {
+        border: 1px solid #4CAF50;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    label {
+        font-weight: bold;
+        flex-basis: 30%; /* Adjust as needed for label width */
+    }
+
+    /* Adjust Checkbox Wrapper */
+    .checkbox-wrapper {
+        display: flex;
+        align-items:center;
+        
+    }
+
+    input[type="checkbox"] {
+        margin-right: 5px; /* Small margin between checkbox and label */
+    }
+
+    input[type="number"], 
+    select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        width: 65%; /* Adjust for input width */
+        transition: border-color 0.3s;
+    }
+
+     /* Highlight Amount Due */
+     #amountDue {
+        color: red; /* Highlight in red */
+        font-weight: bold; /* Make it bold for emphasis */
+    }
+
+    input[type="number"]:focus, 
+    select:focus {
+        border-color: #4CAF50;
+        outline: none;
+    }
+
+    button {
+        padding: 10px;
+        background-color: #4CAF50; /* Constant color for buttons */
+        color: rgb(8, 8, 8);
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #deb633;
+    }
+
+    .logout-btn {
+        padding: 5px 10px; /* Smaller padding for a smaller button */
+        font-size: 14px; /* Smaller font size */
+        background-color: #f44336;
+    }
+
+    .logout-btn:hover {
+        background-color: #d32f2f;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+        #Dashboard {
+            padding: 15px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        button {
+            font-size: 14px;
+        }
+
+        input[type="number"], 
+        select {
+            font-size: 14px;
+        }
+
+        .form-group {
+            flex-direction: column; /* Stack inputs vertically on small screens */
+        }
+
+        label {
+            flex-basis: auto; /* Reset for small screens */
+            margin-bottom: 5px; /* Space between label and input */
+        }
+
+        input[type="number"], 
+        select {
+            width: 100%; /* Full width on small screens */
+        }
+    }
+
+        
+
+        
         /* Basic styling for the page */
         body {
             font-family: Arial, sans-serif;
@@ -20,7 +187,7 @@
 
         /* Tab button styling */
         .tab-button {
-            background-color: #f1f1f1;
+            background-color: #9cb8f5;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
@@ -141,6 +308,41 @@
                 dashboardTabButton.click();
             }
         }
+
+         // Function to toggle sub-select options based on payment method
+    function toggleSubSelect() {
+        const paymentMethod = document.getElementById('payment-method').value;
+        const cardOptions = document.getElementById('card-options');
+        const cryptoOptions = document.getElementById('crypto-options');
+
+        cardOptions.style.display = paymentMethod === 'card' ? 'none' : 'block';
+        cryptoOptions.style.display = paymentMethod === 'crypto' ? 'block' : 'none';
+    }
+
+    function updateSubMethodOptions() {
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const subMethodSelect = document.getElementById('subMethod');
+
+    // Clear existing options
+    subMethodSelect.innerHTML = '';
+
+    // Add new options based on selected payment method
+    if (paymentMethod === 'card') {
+        subMethodSelect.innerHTML += '<option value="credit card">Credit Card</option>';
+        subMethodSelect.innerHTML += '<option value="debit card">Debit Card</option>';
+    } else if (paymentMethod === 'crypto') {
+        subMethodSelect.innerHTML += '<option value="USDT">USDT</option>';
+        subMethodSelect.innerHTML += '<option value="BTC">BTC</option>';
+        subMethodSelect.innerHTML += '<option value="ETH">ETH</option>';
+        subMethodSelect.innerHTML += '<option value="SOL">SOL</option>';
+    }
+}
+
+// Change display values to "Processing" on form submission
+document.getElementById('paymentForm').addEventListener('submit', function() {
+    document.getElementById('paidAmount').textContent = 'Processing';
+    document.getElementById('amountDue').textContent = 'Processing';
+});
     </script>
 </head>
 <body>
@@ -172,7 +374,7 @@
                 <!-- Pricing Information -->
                 <div class="pricing">
                     <p>Price: <s>$30</s> <span style="color: red;">50% off</span> - Now Payable: <strong>$15</strong></p>
-                    <button onclick="redirectToDashboard()">Pay</button>
+                    <button onclick="redirectToDashboard()">Buy Now</button>
                 </div>
 
                 <!-- Sub-collapsible for each day -->
@@ -214,11 +416,50 @@
         <h3>Dashboard</h3>
         <p>Welcome, <%= userEmail %>!</p>
         <p>Here you can see an overview of your activities.</p>
+    
+        <div class="payment-info">
+            <h3>Payment Information</h3>
+            <p><strong>Paid Amount:</strong> <span id="paidAmount"><%= paidAmount || "no data" %></span></p>
+            <p><strong>Amount Due:</strong> <span id="amountDue"><%= amountDue || "no data" %></span></p>
+        </div>
+        
+        <!-- Payment Form Frame -->
+        <div class="payment-frame">
+            <h3>Submit Payment</h3>
+            <form action="/submit-payment" method="POST">
+                <div class="form-group">
+                    <label for="course">Course:</label>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" name="course" value="blockchain" id="blockchain" required> 
+                        <label for="blockchain">Blockchain</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount (in USD):</label>
+                    <input type="number" name="amount" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method:</label>
+                    <select name="paymentMethod" id="paymentMethod" required onchange="updateSubMethodOptions()">
+                        <option value="card">Card</option>
+                        <option value="crypto">Crypto</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subMethod">Sub Payment Method:</label>
+                    <select name="subMethod" id="subMethod" required>
+                        <option value="" disabled selected>Select a method</option>
+                    </select>
+                </div>
+                <button type="submit">Submit Payment Request</button>
+                <p>When you submit a payment request, within 24 hours you will receive a payment link and other payment details to your email. After your payment processed , it will be updated on your dashboard and you will be able to request lessons. You have to complete all due payments to request certificate and dgital badge.Minimum payment is 5 USD </p>
+            </form>
+        </div>
 
         <!-- Logout button inside Dashboard tab -->
-        <form action="/logout" method="POST" style="margin-top: 20px;">
-            <button type="submit">Logout</button>
-        </form>
-    </div>
+    <form action="/logout" method="POST" style="margin-top: 20px;">
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
+    
 </body>
 </html>

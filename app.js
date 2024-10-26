@@ -6,6 +6,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const LessonRequest = require('./models/LessonRequest');
+const PaymentRequest = require('./models/PaymentRequest');
 require('dotenv').config();
 
 const app = express();
@@ -142,14 +143,24 @@ app.get('/main', isAuthenticated, async (req, res) => {
     const email = req.session.user.email;
 
     try {
+        // Fetch the user's payment details from the database
+        const paymentDetails = await PaymentRequest.findOne({ email });
+
+         // Set default values for paidAmount and amountDue
+         let paidAmount = paymentDetails ? paymentDetails.paidAmount : 'no data';
+         let amountDue = paymentDetails ? paymentDetails.amountDue : 'no data';
+
+        
+
         // Fetch all approved lesson requests for the user
         const approvedRequests = await LessonRequest.find({ email, status: 'approved' });
         
-        res.render('main', { userEmail: email, approvedRequests });
+        res.render('main', { userEmail: email, approvedRequests, paidAmount, amountDue });
     } catch (error) {
-        res.status(500).send('Error retrieving approved lessons.');
+        res.status(500).send('Error retrieving payment details.');
     }
 });
+
 
 
 app.post('/logout', (req, res) => {
@@ -173,11 +184,13 @@ app.post('/admin-login', checkAdminCredentials, (req, res) => {
 app.get('/admin', isAdminAuthenticated, async (req, res) => {
     try {
         const lessonRequests = await LessonRequest.find();
-        res.render('admin', { requests: lessonRequests });
+        const paymentRequests = await PaymentRequest.find(); // Fetch payment requests
+        res.render('admin', { requests: lessonRequests, paymentRequests: paymentRequests });
     } catch (error) {
-        res.send('Failed to fetch lesson requests.');
+        res.send('Failed to fetch data.');
     }
 });
+
 
 app.post('/admin/approve-request/:id', isAdminAuthenticated, async (req, res) => {
     const { id } = req.params;
@@ -192,6 +205,84 @@ app.post('/admin/approve-request/:id', isAdminAuthenticated, async (req, res) =>
 });
 
 
+app.post('/submit-payment', isAuthenticated, async (req, res) => {
+    const { course, amount, paymentMethod, subMethod } = req.body;
+    const email = req.session.user.email;
+
+    try {
+        // Find the existing payment request for the user
+        const existingRequest = await PaymentRequest.findOne({ email, course }); // Ensure it matches the course too
+
+        if (existingRequest) {
+            // Update the existing payment request with the new details
+            existingRequest.amount = amount; // Update the amount
+            existingRequest.paymentMethod = paymentMethod; // Update the payment method
+            existingRequest.subMethod = subMethod; // Update the sub-method
+            existingRequest.status = 'pending'; // Update status if necessary
+            
+            // Save the updated payment request
+            await existingRequest.save();
+        } else {
+            // If no existing request, create a new one (if that's a possibility in your logic)
+            const newPaymentRequest = new PaymentRequest({
+                email,
+                course,
+                amount,
+                paymentMethod,
+                subMethod,
+                status: 'pending' // Setting status to 'pending'
+            });
+            await newPaymentRequest.save();
+        }
+
+        // Update the corresponding user's payment details in the database
+        await PaymentRequest.updateOne(
+            { email, course }, // Match the user's email and course
+            {
+                paidAmount: 'pending', // Set paidAmount to 'pending'
+                amountDue: 'pending' // Set amountDue to 'pending'
+            }
+        );
+
+        // Send success response
+        res.send('Payment request submitted successfully. Waiting for admin verification.You will recive an email with the payment details within 24 hours');
+
+    } catch (error) {
+        console.error('Error saving payment request:', error);
+        res.status(500).send('Failed to submit the payment request. Please try again later.');
+    }
+});
+
+
+app.post('/approve-payment/:id', async (req, res) => {
+    const { enterpaidAmount, enterdueAmount } = req.body;
+    const paymentRequestId = req.params.id;
+
+    try {
+        // Find the payment request by ID and update it
+        await PaymentRequest.findByIdAndUpdate(paymentRequestId, {
+            paidAmount: enterpaidAmount,
+            amountDue: enterdueAmount,
+            paidamountsofar:enterpaidAmount,
+            paymentduesofar: enterdueAmount,
+            amount:0,
+            status: 'approved' // Update the status as necessary
+        });
+
+        res.redirect('/admin'); // Redirect back to admin panel or appropriate route
+    } catch (error) {
+        console.error('Error updating payment request:', error);
+        res.status(500).send('Failed to update the payment request. Please try again later.');
+    }
+});
+
+
+
+
+
+
+
+
 // Lesson routes
 app.post('/request-lesson/:day', isAuthenticated, async (req, res) => {
     const { day } = req.params;
@@ -200,7 +291,7 @@ app.post('/request-lesson/:day', isAuthenticated, async (req, res) => {
     try {
         const newRequest = new LessonRequest({ email, day });
         await newRequest.save();
-        res.send('Request submitted successfully. Waiting for admin approval.');
+        res.send('Request submitted successfully. Waiting for admin approval.It can take upto 24 hours. You will receive an email when it is ready');
     } catch (error) {
         res.status(500).send('Failed to submit the request. Please try again later.');
     }

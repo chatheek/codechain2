@@ -147,5 +147,55 @@
             </table>
         <% } %>
     </div>
+
+    
+
+    <h2>Payment Requests</h2>
+
+    <% if (paymentRequests.length === 0) { %>
+        <p>No payment requests at the moment.</p>
+    <% } else { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Course</th>
+                    <th>Amount (USD)</th>
+                    <th>Payment Method</th>
+                    <th>Enter Paid Amount</th>
+                    <th>Enter Payment Due</th>
+                    <th>Approve</th>
+                    <th>Paid Amount so far</th>
+                    <th>Payment Due so far</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% paymentRequests.forEach(function(request) { %>
+                    <tr>
+                        <td><%= request.email %></td>
+                        <td><%= request.course %></td>
+                        <td><%= request.amount %></td>
+                        <td><%= request.subMethod %></td>
+                        <td>
+                            <form action="/approve-payment/<%= request._id %>" method="POST">
+                                <input type="text" name="enterpaidAmount" placeholder="Enter paid" required>
+                        </td>
+                        <td>
+                                <input type="text" name="enterdueAmount" placeholder="Enter due" required>
+                        </td>
+                        <td>
+                                <input type="submit" value="Update">
+                            </form>
+                        </td>
+                        <td><%= request.paidamountsofar %></td>
+                        <td><%= request.paymentduesofar %></td>
+                        
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } %>
+    
+
 </body>
 </html>
