@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay by card safely through buymecoffee.com</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      .container {
+            margin-top: 50px;
+        }
+        .pay-button {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .content img {
+            width: 20%; /* Adjusted size */
+            height: auto;
+            margin-bottom: 30px;
+            border: 1px solid #ccc; /* Thin border */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">CodeChain.online</h1>
+        <h1 class="text-center">Pay with crypto : <div style="color:blue;">SOL(BEP20)</div></h1>
+        <h2 class="text-center">We do our best to provide education for you for a fair fee</h2><br><br>
+
+        
+
+        <div class="content">
+            <h2 style="color:red;">Scan the above QR or  follow these instructions as mentioned</h2>
+            <h3><div style="color:red;">Important:Select Network "BEP20 (BNB SMART CHAIN)".</div>Selecting other network will cause loss of funds</h3>
+            <div>
+                <h5 style="color:rgb(39, 3, 180);">Wallet Address: <span id="wallet-address">0x2e2709e3eb9100b947c623f4d8ad210e683c7e56</span></h5>
+                <button onclick="copyAddress()">Copy Address</button>
+            </div>
+
+            <img src="sol.jpg" alt="Image 1">
+
+            
+            <h3>Minimum deposit is 5 US$</h3>
+         
+
+            <h3>After successful payment send us your payment proof(screenshot)/ wallet address/ Transaction Hash (TxID) if possible to our email/ chat/ whatsapp.</h3>
+            <h6>Support: info@codechain.online | Whatsapp: +94 704369397</h6>
+           
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function copyAddress() {
+            const address = document.getElementById("wallet-address").innerText;
+            navigator.clipboard.writeText(address).then(() => {
+                alert("Address copied to clipboard");
+            }).catch(err => {
+                console.error("Could not copy address: ", err);
+            });
+        }
+    </script>
+</body>
+</html>
