@@ -104,6 +104,25 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+app.get('/eth', (req, res) => {
+    res.render('eth');
+});
+
+app.get('/btc', (req, res) => {
+    res.render('btc');
+});
+app.get('/usdt', (req, res) => {
+    res.render('usdt');
+});
+
+app.get('/sol', (req, res) => {
+    res.render('sol');
+});
+
+app.get('/pay', (req, res) => {
+    res.render('buymecofee');
+});
+
 app.get('/login', (req, res) => {
     res.render('login');
 });
